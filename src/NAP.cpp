@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include <cstdio>
 #include <stdio.h>
-// #include <gsl/gsl_rng.h>
-// #include <gsl/gsl_randist.h>
 #include <random>
 #include <math.h>
 #include <vector>
@@ -14,15 +12,12 @@
 #include <sstream>
 
 
-// // #define ARMA_64BIT_WORD 1
+#define ARMA_64BIT_WORD 1
 // //// https://stackoverflow.com/questions/40592054/large-matrices-in-rcpparmadillo-via-the-arma-64bit-word-define
-
-//// when armadillo is loaded, remove this below
-//// #include <Rcpp.h>
+//// when armadillo is loaded, //// #include <Rcpp.h>
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(Rcpp)]]
 // [[Rcpp::depends(RcppArmadillo)]]
-//// Enable C++11 via this plugin (Rcpp 0.10.3 or later)
 // [[Rcpp::plugins(cpp11)]]
 
 
