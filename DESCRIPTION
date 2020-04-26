@@ -1,0 +1,13 @@
+Package: napspg
+Type: Package
+Title: A Non-Additive Polygenic model optimized with Spectral Projected Gradients for Genome-Wide Associations with global epistasis
+Version: 1.0
+Date: 2020-01-30
+Author: Moi Exposito-Alonso
+Maintainer: Your Name <moisesexpositoalonso@gmail.com>
+Description: NAP is optimized with Spectral Projected Gradients for Genome-Wide Associations
+        with global epistasis.
+License: GPL (>= 2)
+Imports: Rcpp (>= 1.0.1)
+LinkingTo: Rcpp, RcppArmadillo
+SystemRequirements: C++11
