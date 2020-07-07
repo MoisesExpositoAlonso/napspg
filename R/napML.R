@@ -1,6 +1,60 @@
-
+run_gemma<-function(
+                    plinkbase,
+                    plinkfolder='.',
+                    out=".",
+                    type='bslmm',
+                    maf=0.0,
+                    background=TRUE,
+                    dryrun=FALSE
+                    ){
+background=ifelse(background==F, " ", " &")
+if(type=='bslmm'){
+  command= paste0('nice ~/bin/gemma -bfile ', file.path(plinkfolder, plinkbase) ,'  -bslmm ')
+}else if(type=='lm'){
+  command= paste0('nice  ~/bin/gemma -bfile ', file.path(plinkfolder, plinkbase) ,'  -lm 4  ')
+}else if(type=='lmm'){
+  command0= paste0('nice  ~/bin/gemma -bfile ', file.path(plinkfolder, plinkbase) ,'  -gk 1  -o ' ,out)
+  command= paste0('nice  ~/bin/gemma -bfile ', file.path(plinkfolder, plinkbase) ,'  -k ', paste0(out,'.cXX.txt') , '  -lmm 4 ')
+}
+if( !type %in% c('bslmm','lm','lmm')) stop('type of GWA not recognized')
+# Add maf
+command<-paste(command, "-maf", maf)
+# Add out
+command<-paste(command, ' -o ' ,out)
+# Add background
+command<-paste(command, background)
+# Run gemma
+if(dryrun==TRUE){
+  message("Dry run, only printing command")
+  if(type=='lmm') print(command0)
+  print(command)
+}else{
+message(paste('running GEMMA command: ',command))
+  if(type=='lmm') system(command0)
+  system(command)
+}
+return(TRUE)
+}
+pred_gemma<-function(
+  predict=1,
+  bfile="../gemma/rFitness_mhi/515g",
+  epm="output/rFitness_mhi.param.txt",
+  emu="output/rFitness_mhi.log.txt",
+  o="rFitness_mhi-predict",
+  dryrun=F
+){
+  command<-paste("nice  ~/bin/gemma -bfile",bfile,
+                 "-predict",predict,
+                 "-epm",epm,
+                 "-emu",emu,
+                 "-o",o
+  )
+  # gemma -bfile ../gemma/rFitness_mhi/515g -epm output/rFitness_mhi.param.txt -emu output/rFitness_mhi.log.txt  -o rFitness_mhi -predict 1
+  if(!dryrun) system(command)
+  print(command)
+  return(TRUE)
+}
 .read_gemma<-function(folder="output", name, what='heritability'){
-  ## Define functions
     .read_hyperparameters<-function(outfile, hyperparameter=1, MCMCchain=1000,quantiles= c(0.5,0.025,0.975) ){
     hyp<-read.table(outfile,header=TRUE, stringsAsFactors = FALSE) %>% tail(n=MCMCchain)
     # hist(hyp[,hyperparameter], main = outfile)
@@ -28,7 +82,7 @@
 
     return(d)
   }
-  ## Run
+  ##Run
   if(what=='heritability'){
     res=.read_hyperparameters(file.path(folder,paste0(name,".hyp.txt")))
   }else if(what=='lm'){
@@ -323,4 +377,7 @@ napcall<-function(bedfiles,famfiles,mapfiles,parfiles,
     }
   }
 }
+
+
+
 
